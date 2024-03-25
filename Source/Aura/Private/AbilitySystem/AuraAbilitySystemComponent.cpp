@@ -20,3 +20,4 @@ void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* Ability
 
 	EffectAssetTags.Broadcast(TagContainer);
 }
+ 
