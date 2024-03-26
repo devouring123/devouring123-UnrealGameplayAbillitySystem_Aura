@@ -12,19 +12,19 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	 * Primary Attributes
 	 */
 
-	GameplayTags.Attributes_Secondary_Armor = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	GameplayTags.Attributes_Primary_Strength = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Primary.Strength"),
 		FString("Increases Physical Damage")
 	);
-	GameplayTags.Attributes_Secondary_Armor = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	GameplayTags.Attributes_Primary_Intelligence = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Primary.Intelligence"),
 		FString("Increases Magical Damage")
 	);
-	GameplayTags.Attributes_Secondary_Armor = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	GameplayTags.Attributes_Primary_Resilience = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Primary.Resilience"),
 		FString("Increases Armor and Armor Penetration")
 	);
-	GameplayTags.Attributes_Secondary_Armor = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	GameplayTags.Attributes_Primary_Vigor = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Primary.Vigor"),
 		FString("Increases Health")
 	);
