@@ -13,27 +13,26 @@
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
-/**
- * 
- */
+
 USTRUCT()
 struct FEffectProperty
 {
 	GENERATED_BODY()
-	FEffectProperty(){}
-	
+	FEffectProperty()
+	{
+	}
+
 	UPROPERTY()
 	UAbilitySystemComponent* AbilitySystemComponent = nullptr;
-	
+
 	UPROPERTY()
 	AActor* AvatarActor = nullptr;
-	
+
 	UPROPERTY()
 	AController* Controller = nullptr;
-	
+
 	UPROPERTY()
 	ACharacter* Character = nullptr;
-
 };
 
 USTRUCT()
@@ -41,17 +40,25 @@ struct FEffectProperties
 {
 	GENERATED_BODY()
 
-	FEffectProperties(){}
+	FEffectProperties()
+	{
+	}
 
 	UPROPERTY()
 	FGameplayEffectContextHandle EffectContextHandle;
-	
+
 	UPROPERTY()
 	FEffectProperty Source;
-	
+
 	UPROPERTY()
 	FEffectProperty Target;
 };
+
+// typedef Is Specific To The FGameplayAttribute() Signature, But TStaticFuncPtr Is Generic To Any Signature Chosen
+// typedef TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr FAttributeFuncPtr;
+template<class T>
+using TStaticFuncPtr = typename  TBaseStaticDelegateInstance<T, FDefaultDelegateUserPolicy>::FFuncPtr;
+
 
 UCLASS()
 class AURA_API UAuraAttributeSet : public UAttributeSet
@@ -65,6 +72,8 @@ public:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
+	TMap<FGameplayTag, TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;
+
 	/*
 	 *	Primary Attributes
 	 */
@@ -76,11 +85,11 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Intelligence, Category = "Primary Attributes")
 	FGameplayAttributeData Intelligence;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Intelligence);
-	
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Resilience, Category = "Primary Attributes")
 	FGameplayAttributeData Resilience;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Resilience);
-	
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Vigor, Category = "Primary Attributes")
 	FGameplayAttributeData Vigor;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Vigor);
@@ -88,7 +97,7 @@ public:
 	/*
 	 *	Vital Attributes
 	 */
-	
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health);
@@ -96,7 +105,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Mana, Category = "Vital Attributes")
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);
-	
+
 	/*
 	 *	Secondary Attributes
 	 */
@@ -136,11 +145,11 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes")
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
-	
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Vital Attributes")
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
-	
+
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
 
@@ -152,7 +161,7 @@ public:
 
 	UFUNCTION()
 	void OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence) const;
-	
+
 	UFUNCTION()
 	void OnRep_Resilience(const FGameplayAttributeData& OldResilience) const;
 
