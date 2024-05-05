@@ -1,0 +1,21 @@
+// Copyright Sosil202403
+
+
+#include "AbilitySystem/AbilityTasks/TargetDataUnderMouse.h"
+
+UTargetDataUnderMouse* UTargetDataUnderMouse::CreateTargetDataUnderMouse(UGameplayAbility* OwningAbility)
+{
+	UTargetDataUnderMouse* MyObj = NewAbilityTask<UTargetDataUnderMouse>(OwningAbility);
+	return MyObj;
+}
+
+void UTargetDataUnderMouse::Activate()
+{
+	APlayerController* PC = Ability->GetCurrentActorInfo()->PlayerController.Get();
+	FHitResult CursorHit;
+	PC->GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+	
+	ValidData.Broadcast(CursorHit.Location);
+	DrawDebugSphere(GetWorld(), CursorHit.Location, 10, 32, FColor::Red, false, 5);
+	
+}
