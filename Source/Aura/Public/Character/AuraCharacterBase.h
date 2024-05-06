@@ -38,6 +38,7 @@ protected:
 	
 	// Combat Interface
 	virtual FVector GetCombatSocketLocation() override;
+	
 	// End Combat Interface
 	
 	UPROPERTY()
