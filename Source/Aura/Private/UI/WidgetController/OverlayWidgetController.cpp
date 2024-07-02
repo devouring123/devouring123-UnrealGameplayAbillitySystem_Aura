@@ -27,47 +27,47 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		AuraAttributeSet->GetHealthAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
-		{
-			OnHealthChange.Broadcast(Data.NewValue);
-		}
-	);
+			{
+				OnHealthChange.Broadcast(Data.NewValue);
+			}
+		);
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		AuraAttributeSet->GetMaxHealthAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
-		{
-			OnMaxHealthChange.Broadcast(Data.NewValue);
-		}
-	);
+			{
+				OnMaxHealthChange.Broadcast(Data.NewValue);
+			}
+		);
 	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		AuraAttributeSet->GetManaAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
-		{
-			OnManaChange.Broadcast(Data.NewValue);
-		}
-	);
+			{
+				OnManaChange.Broadcast(Data.NewValue);
+			}
+		);
 	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		AuraAttributeSet->GetMaxManaAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
-		{
-			OnMaxManaChange.Broadcast(Data.NewValue);
-		}
-	);
+			{
+				OnMaxManaChange.Broadcast(Data.NewValue);
+			}
+		);
 
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
 		[this](const FGameplayTagContainer& AssetTags)
-		{
-			const FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
-			for (FGameplayTag Tag : AssetTags)
 			{
-				if (Tag.MatchesTag(MessageTag))
+				const FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
+				for (FGameplayTag Tag : AssetTags)
 				{
-					FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
-					MessageWidgetRow.Broadcast(*Row);
+					if (Tag.MatchesTag(MessageTag))
+					{
+						FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+						MessageWidgetRow.Broadcast(*Row);
+					}
 				}
 			}
-		}
-	);
+		);
 }
