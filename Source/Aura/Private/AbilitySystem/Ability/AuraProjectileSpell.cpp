@@ -45,6 +45,8 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 		const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
 		Projectile->DamageEffectSpecHandle = SpecHandle;
 		
+		Projectile->SetInstigator(Cast<APawn>(SourceASC->GetAvatarActor()));
+		
 		Projectile->FinishSpawning(SpawnTransform);
 	}
 }
