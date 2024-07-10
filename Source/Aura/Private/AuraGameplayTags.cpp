@@ -78,14 +78,14 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	 */
 
 	GameplayTags.Attributes_Vital_Health = UGameplayTagsManager::Get().AddNativeGameplayTag(
-	FName("Attributes.Vital.Health"),
-	FString("Health")
-);
+		FName("Attributes.Vital.Health"),
+		FString("Health")
+	);
 	GameplayTags.Attributes_Vital_Mana = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Vital.Mana"),
 		FString("Mana")
 	);
-	
+
 	/*
 	 * Input Tag
 	 */
@@ -113,5 +113,13 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.InputTag_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.4"),
 		FString("Input Tag for 4 Key")
+	);
+
+	/*
+	 * Damage Tag
+	 */
+	GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage"),
+		FString("Damage")
 	);
 }
