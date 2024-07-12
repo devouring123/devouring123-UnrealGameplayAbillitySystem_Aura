@@ -10,13 +10,23 @@
 #include "NavigationSystem.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Components/SplineComponent.h"
+#include "GameFramework/Character.h"
 #include "Input/AuraInputComponent.h"
 #include "Interaction/EnemyInterface.h"
+#include "UI/Widget/DamageTextComponent.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;
 	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
+}
+
+void AAuraPlayerController::PlayerTick(float DeltaSeconds)
+{
+	Super::PlayerTick(DeltaSeconds);
+
+	CursorTrace();
+	AutoRun();
 }
 
 void AAuraPlayerController::BeginPlay()
@@ -57,12 +67,16 @@ void AAuraPlayerController::SetupInputComponent()
 	                                       &ThisClass::AbilityInputTagHeld);
 }
 
-void AAuraPlayerController::PlayerTick(float DeltaSeconds)
+void AAuraPlayerController::ClientShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter)
 {
-	Super::PlayerTick(DeltaSeconds);
-
-	CursorTrace();
-	AutoRun();
+	if(IsValid(TargetCharacter) && DamageTextComponentClass)
+	{
+		UDamageTextComponent* DamageText = NewObject<UDamageTextComponent>(TargetCharacter, DamageTextComponentClass);
+		DamageText->RegisterComponent();
+		DamageText->AttachToComponent(TargetCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		DamageText->SetDamageText(DamageAmount);
+	}
 }
 
 void AAuraPlayerController::AutoRun()

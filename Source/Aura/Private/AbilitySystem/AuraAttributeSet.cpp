@@ -9,7 +9,9 @@
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+#include "Player/AuraPlayerController.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -95,10 +97,19 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	}
 	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
 	{
+		// Reset Incoming Damage Attribute
 		const float LocalIncomingDamage = GetIncomingDamage();
 		SetIncomingDamage(0.f);
+		
+		// Adjusting Damage
 		if (LocalIncomingDamage > 0.f)
 		{
+			// TODO: Make Damage Through Filters, Like Armor, DamageBonus, And So On
+			
+			// TODO: Call Damage Widget
+			ShowFloatingText(Props, LocalIncomingDamage);
+				
+			// Clamping Damage
 			const float NewHealth = GetHealth() - LocalIncomingDamage;
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 
@@ -116,6 +127,17 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				TagContainer.AddTag(FAuraGameplayTags::Get().Effect_HitReact);
 				Props.Target.AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer);
 			}
+		}
+	}
+}
+
+void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+{
+	if(Props.Source.Character != Props.Target.Character)
+	{
+		if(AAuraPlayerController* PC = Cast<AAuraPlayerController>(Props.Source.Controller))
+		{
+			PC->ClientShowDamageNumber(Damage, Props.Target.Character);
 		}
 	}
 }
