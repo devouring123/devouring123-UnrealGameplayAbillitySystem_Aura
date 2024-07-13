@@ -78,7 +78,7 @@ void AAuraEnemy::UnHighlightActor()
 	UE_LOG(LogTemp, Display, TEXT("UnHighLight"));
 }
 
-int32 AAuraEnemy::GetPlayerLevel()
+int32 AAuraEnemy::GetPlayerLevel() const
 {
 	return Level;
 }
