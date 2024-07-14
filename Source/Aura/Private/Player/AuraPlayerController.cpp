@@ -67,7 +67,7 @@ void AAuraPlayerController::SetupInputComponent()
 	                                       &ThisClass::AbilityInputTagHeld);
 }
 
-void AAuraPlayerController::ClientShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter)
+void AAuraPlayerController::ClientShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter, bool bCriticalHit, bool bBlockingHit)
 {
 	if(IsValid(TargetCharacter) && DamageTextComponentClass)
 	{

@@ -7,6 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "AuraGameplayTags.h"
 #include "GameplayEffectExtension.h"
+#include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -84,7 +85,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 	FEffectProperties Props;
 	SetEffectProperties(Data, Props);
-	
+
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
@@ -100,15 +101,17 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		// Reset Incoming Damage Attribute
 		const float LocalIncomingDamage = GetIncomingDamage();
 		SetIncomingDamage(0.f);
-		
+
 		// Adjusting Damage
 		if (LocalIncomingDamage > 0.f)
 		{
 			// TODO: Make Damage Through Filters, Like Armor, DamageBonus, And So On
-			
+
 			// TODO: Call Damage Widget
-			ShowFloatingText(Props, LocalIncomingDamage);
-				
+			const bool bCriticalHit = UAuraAbilitySystemLibrary::GetIsBlockedHit(Props.EffectContextHandle);
+			const bool bBlockedHit = UAuraAbilitySystemLibrary::GetIsBlockedHit(Props.EffectContextHandle);
+			ShowFloatingText(Props, LocalIncomingDamage, bCriticalHit, bBlockedHit);
+
 			// Clamping Damage
 			const float NewHealth = GetHealth() - LocalIncomingDamage;
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
@@ -116,7 +119,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			const bool bFatal = NewHealth <= 0;
 			if (bFatal)
 			{
-				if(const TScriptInterface<ICombatInterface> CombatInterface = Props.Target.AvatarActor)
+				if (const TScriptInterface<ICombatInterface> CombatInterface = Props.Target.AvatarActor)
 				{
 					CombatInterface->Die();
 				}
@@ -131,13 +134,14 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	}
 }
 
-void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bCriticalHit,
+                                         bool bBlockingHit) const
 {
-	if(Props.Source.Character != Props.Target.Character)
+	if (Props.Source.Character != Props.Target.Character)
 	{
-		if(AAuraPlayerController* PC = Cast<AAuraPlayerController>(Props.Source.Controller))
+		if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(Props.Source.Controller))
 		{
-			PC->ClientShowDamageNumber(Damage, Props.Target.Character);
+			PC->ClientShowDamageNumber(Damage, Props.Target.Character, bCriticalHit, bBlockingHit);
 		}
 	}
 }

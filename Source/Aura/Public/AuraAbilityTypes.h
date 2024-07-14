@@ -9,12 +9,12 @@ struct FAuraGameplayEffectContext : public FGameplayEffectContext
 	GENERATED_BODY()
 
 public:
-	bool IsCriticalHit() const
+	bool GetIsCriticalHit() const
 	{
 		return bIsCriticalHit;
 	}
 
-	bool IsBlockedHit() const
+	bool GetIsBlockedHit() const
 	{
 		return bIsBlockedHit;
 	}

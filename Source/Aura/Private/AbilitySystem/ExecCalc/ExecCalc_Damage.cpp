@@ -4,6 +4,7 @@
 #include "AbilitySystem/ExecCalc/ExecCalc_Damage.h"
 
 #include "AbilitySystemComponent.h"
+#include "AuraAbilityTypes.h"
 #include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
@@ -57,7 +58,8 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	const TScriptInterface<ICombatInterface> TargetCombatInterface = TargetAvatar;
 	
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
-
+	FGameplayEffectContextHandle EffectContextHandle = Spec.GetContext();
+	
 	const FGameplayTagContainer* SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
 	const FGameplayTagContainer* TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
 
@@ -85,6 +87,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().CriticalHitDamageDef, EvaluateParameters, SourceCriticalHitDamage);
 
 	const bool bCriticalHit = FMath::RandRange(0,100) < SourceCriticalHitChance - TargetCriticalHitResistance * CriticalHitResistanceCoefficient;
+	UAuraAbilitySystemLibrary::SetIsCriticalHit(EffectContextHandle, bCriticalHit);
 	Damage = bCriticalHit ? Damage * 2.0f + SourceCriticalHitDamage : Damage;
 	
 	// Capture BlockChance on Target, and determine if there was a successful Block
@@ -92,8 +95,9 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().BlockChanceDef, EvaluateParameters, TargetBlockChance);
 
 	// If Block, halve the Damage;
-	const bool bBlocked = FMath::RandRange(0,100) < TargetBlockChance;
-	Damage = bBlocked ? Damage * 0.5f : Damage;
+	const bool bBlockedHit = FMath::RandRange(0,100) < TargetBlockChance;
+	UAuraAbilitySystemLibrary::SetIsCriticalHit(EffectContextHandle, bBlockedHit);
+	Damage = bBlockedHit ? Damage * 0.5f : Damage;
 
 	// Capture Armor on Target, ArmorPenetration on Source
 	float TargetArmor = 0.f;
