@@ -34,6 +34,7 @@ public:
 	AAuraEffectActor();
 
 protected:
+	
 	virtual void BeginPlay() override;
 	
 	UFUNCTION(BlueprintCallable)
@@ -74,5 +75,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects")
 	float ActorLevel = 1.f;
 private:
+
 	
 };

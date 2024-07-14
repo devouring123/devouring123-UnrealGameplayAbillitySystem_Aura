@@ -8,6 +8,7 @@
 #include "AbilitySystemInterface.h"
 
 
+
 AAuraEffectActor::AAuraEffectActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -96,3 +97,4 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 		}
 	}
 }
+
