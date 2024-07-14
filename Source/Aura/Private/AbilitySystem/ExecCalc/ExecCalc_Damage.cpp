@@ -70,8 +70,14 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	const UCharacterClassInfo* CharacterClassInfo = UAuraAbilitySystemLibrary::GetCharacterClassInfo(SourceAvatar);
 
 	// Get Damage Set By Caller Magnitude
-	float Damage = Spec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().Damage);
-
+	float Damage = 0;
+	
+	for(FGameplayTag DamageType: FAuraGameplayTags::Get().DamageTypes)
+	{
+		const float DamageTypeValue = Spec.GetSetByCallerMagnitude(DamageType);
+		Damage += DamageTypeValue;
+	}
+	
 	// CriticalHitResistance Reduce CriticalHitChance
 	// If Critical Hit, Double Damage and Add Critical Hit Damage
 	float SourceCriticalHitChance = 0.f;
