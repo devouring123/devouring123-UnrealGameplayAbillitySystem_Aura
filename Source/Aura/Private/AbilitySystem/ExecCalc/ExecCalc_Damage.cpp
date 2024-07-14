@@ -96,7 +96,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	// If Block, halve the Damage;
 	const bool bBlockedHit = FMath::RandRange(0,100) < TargetBlockChance;
-	UAuraAbilitySystemLibrary::SetIsCriticalHit(EffectContextHandle, bBlockedHit);
+	UAuraAbilitySystemLibrary::SetIsBlockedHit(EffectContextHandle, bBlockedHit);
 	Damage = bBlockedHit ? Damage * 0.5f : Damage;
 
 	// Capture Armor on Target, ArmorPenetration on Source

@@ -108,7 +108,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			// TODO: Make Damage Through Filters, Like Armor, DamageBonus, And So On
 
 			// TODO: Call Damage Widget
-			const bool bCriticalHit = UAuraAbilitySystemLibrary::GetIsBlockedHit(Props.EffectContextHandle);
+			const bool bCriticalHit = UAuraAbilitySystemLibrary::GetIsCriticalHit(Props.EffectContextHandle);
 			const bool bBlockedHit = UAuraAbilitySystemLibrary::GetIsBlockedHit(Props.EffectContextHandle);
 			ShowFloatingText(Props, LocalIncomingDamage, bCriticalHit, bBlockedHit);
 
@@ -135,13 +135,13 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 }
 
 void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bCriticalHit,
-                                         bool bBlockingHit) const
+                                         bool bBlockedHit) const
 {
 	if (Props.Source.Character != Props.Target.Character)
 	{
 		if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(Props.Source.Controller))
 		{
-			PC->ClientShowDamageNumber(Damage, Props.Target.Character, bCriticalHit, bBlockingHit);
+			PC->ClientShowDamageNumber(Damage, Props.Target.Character, bCriticalHit, bBlockedHit);
 		}
 	}
 }
