@@ -37,6 +37,9 @@ void AAuraEnemy::BeginPlay()
 	if(HasAuthority())
 	{
 		UAuraAbilitySystemLibrary::GiveStartUpAbilities(this, AbilitySystemComponent);
+		AuraAIController = Cast<AAuraAIController>(Controller);
+		AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+		AuraAIController->RunBehaviorTree(BehaviorTree);
 	}
 
 	if (UAuraUserWidget* AuraUserWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
@@ -72,14 +75,14 @@ void AAuraEnemy::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	if(!HasAuthority())
-	{
-		return;
-	}
-	
-	AuraAIController = Cast<AAuraAIController>(NewController);
-	AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
-	AuraAIController->RunBehaviorTree(BehaviorTree);
+	// if(!HasAuthority())
+	// {
+	// 	return;
+	// }
+	//
+	// AuraAIController = Cast<AAuraAIController>(NewController);
+	// AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	// AuraAIController->RunBehaviorTree(BehaviorTree);
 }
 
 void AAuraEnemy::HighlightActor()
