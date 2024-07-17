@@ -9,6 +9,7 @@
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AI/AuraAIController.h"
 #include "Aura/Aura.h"
+#include "Aura/AuraVariables.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/WidgetComponent.h"
@@ -48,6 +49,8 @@ void AAuraEnemy::BeginPlay()
 		AuraAIController = Cast<AAuraAIController>(Controller);
 		AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
 		AuraAIController->RunBehaviorTree(BehaviorTree);
+		AuraAIController->GetBlackboardComponent()->SetValueAsBool(BLACKBOARD_KEY_HITREACTING, false);
+		AuraAIController->GetBlackboardComponent()->SetValueAsBool(BLACKBOARD_KEY_RANGEDATTACKER, CharacterClass != ECharacterClass::Warrior);
 	}
 
 	if (UAuraUserWidget* AuraUserWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
@@ -124,6 +127,11 @@ void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCou
 {
 	bHitReacting = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+	
+	if(HasAuthority())
+	{
+		AuraAIController->GetBlackboardComponent()->SetValueAsBool(BLACKBOARD_KEY_HITREACTING, bHitReacting);
+	}
 }
 
 void AAuraEnemy::InitAbilityActorInfo()

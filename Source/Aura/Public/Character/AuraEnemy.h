@@ -74,5 +74,4 @@ protected:
 	TObjectPtr<AAuraAIController> AuraAIController;
 
 
-
 };
