@@ -6,7 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
-
+#include "Aura/Aura.h"
 
 
 AAuraEffectActor::AAuraEffectActor()
@@ -22,6 +22,11 @@ void AAuraEffectActor::BeginPlay()
 
 void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
+	if(TargetActor->ActorHasTag(ACTOR_TAG_ENEMY) && !bApplyEffectToEnemies)
+	{
+		return;
+	}
+	
 	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	if (!TargetASC) return;
 
@@ -39,10 +44,17 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	{
 		ActiveEffectHandles.Add(ActiveEffectHandle, TargetASC);
 	}
+	
+	bIsEffectApplied = true;
 }
 
 void AAuraEffectActor::OnOverlap(AActor* TargetActor)
 {
+	if(TargetActor->ActorHasTag(ACTOR_TAG_ENEMY) && !bApplyEffectToEnemies)
+	{
+		return;
+	}
+	
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
 		ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
@@ -58,10 +70,20 @@ void AAuraEffectActor::OnOverlap(AActor* TargetActor)
 	{
 		ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
 	}
+	
+	if(bIsEffectApplied && bDestroyOnEffectApplication && !IsValid(InfiniteGameplayEffectClass))
+	{
+		Destroy();
+	}
 }
 
 void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 {
+	if(TargetActor->ActorHasTag(ACTOR_TAG_ENEMY) && !bApplyEffectToEnemies)
+	{
+		return;
+	}
+	
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
 		ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
@@ -95,6 +117,11 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 		{
 			ActiveEffectHandles.FindAndRemoveChecked(Handle);
 		}
+	}
+	
+	if(bIsEffectApplied && bDestroyOnEffectApplication && !IsValid(InfiniteGameplayEffectClass))
+	{
+		Destroy();
 	}
 }
 
