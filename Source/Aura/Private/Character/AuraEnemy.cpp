@@ -26,11 +26,11 @@ AAuraEnemy::AAuraEnemy()
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 
 	Tags.Add(ACTOR_TAG_ENEMY);
-	
+
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
-	
+
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
@@ -42,8 +42,8 @@ void AAuraEnemy::BeginPlay()
 	Super::BeginPlay();
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
-	
-	if(HasAuthority())
+
+	if (HasAuthority())
 	{
 		UAuraAbilitySystemLibrary::GiveStartUpAbilities(this, AbilitySystemComponent, CharacterClass);
 		AuraAIController = Cast<AAuraAIController>(Controller);
@@ -112,6 +112,16 @@ void AAuraEnemy::UnHighlightActor()
 	UE_LOG(LogTemp, Display, TEXT("UnHighLight"));
 }
 
+AActor* AAuraEnemy::GetCombatTarget_Implementation() const
+{
+	return CombatTarget;
+}
+
+void AAuraEnemy::SetCombatTarget_Implementation(AActor* InCombatTarget)
+{
+	CombatTarget = InCombatTarget;
+}
+
 int32 AAuraEnemy::GetCharacterLevel() const
 {
 	return Level;
@@ -127,8 +137,8 @@ void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCou
 {
 	bHitReacting = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
-	
-	if(HasAuthority())
+
+	if (HasAuthority())
 	{
 		AuraAIController->GetBlackboardComponent()->SetValueAsBool(BLACKBOARD_KEY_HITREACTING, bHitReacting);
 	}
