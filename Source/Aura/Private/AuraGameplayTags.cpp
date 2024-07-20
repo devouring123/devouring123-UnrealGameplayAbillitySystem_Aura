@@ -177,9 +177,26 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	/*
 	 * Effect Tag
 	 */
-	
+
 	GameplayTags.Effect_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Effect.HitReact"),
 		FString("Hit React")
+	);
+
+	/*
+	 * Abilities
+	 */
+
+	GameplayTags.Abilities_Attack_Melee = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Attack.Melee"),
+		FString("Melee Attack Abilities")
+	);
+	GameplayTags.Abilities_Attack_Ranged = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Attack.Ranged"),
+		FString("Ranged Attack Abilities")
+	);
+	GameplayTags.Abilities_Attack_Spell = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Attack.Spell"),
+		FString("Spell Attack Abilities")
 	);
 }

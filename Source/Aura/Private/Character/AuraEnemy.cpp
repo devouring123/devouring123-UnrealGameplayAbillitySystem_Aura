@@ -45,7 +45,7 @@ void AAuraEnemy::BeginPlay()
 	
 	if(HasAuthority())
 	{
-		UAuraAbilitySystemLibrary::GiveStartUpAbilities(this, AbilitySystemComponent);
+		UAuraAbilitySystemLibrary::GiveStartUpAbilities(this, AbilitySystemComponent, CharacterClass);
 		AuraAIController = Cast<AAuraAIController>(Controller);
 		AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
 		AuraAIController->RunBehaviorTree(BehaviorTree);
@@ -112,7 +112,7 @@ void AAuraEnemy::UnHighlightActor()
 	UE_LOG(LogTemp, Display, TEXT("UnHighLight"));
 }
 
-int32 AAuraEnemy::GetPlayerLevel() const
+int32 AAuraEnemy::GetCharacterLevel() const
 {
 	return Level;
 }

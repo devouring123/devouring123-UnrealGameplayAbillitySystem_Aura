@@ -57,6 +57,10 @@ public:
 
 	FGameplayTag Effect_HitReact;
 
+	FGameplayTag Abilities_Attack_Melee;
+	FGameplayTag Abilities_Attack_Ranged;
+	FGameplayTag Abilities_Attack_Spell;
+
 protected:
 
 private:
