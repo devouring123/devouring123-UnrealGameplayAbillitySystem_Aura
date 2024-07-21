@@ -30,7 +30,7 @@ public:
 	virtual void BeginPlay() override;
 	
 	// Combat Interface
-	virtual FVector GetCombatSocketLocation() const override;
+	virtual  FVector GetCombatSocketLocation_Implementation() const override;
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 	virtual void Die() override;
 	// End Combat Interface
