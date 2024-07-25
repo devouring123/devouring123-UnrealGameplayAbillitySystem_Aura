@@ -60,6 +60,11 @@ AActor* AAuraCharacterBase::GetAvatarActor_Implementation()
 	return this;
 }
 
+TArray<FTagMontage> AAuraCharacterBase::GetAttackMontages_Implementation()
+{
+	return AttackMontages;
+}
+
 void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 {
 	Weapon->SetSimulatePhysics(true);

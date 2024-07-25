@@ -30,11 +30,15 @@ public:
 	virtual void BeginPlay() override;
 	
 	// Combat Interface
-	virtual  FVector GetCombatSocketLocation_Implementation() const override;
+	UPROPERTY(EditAnywhere, Category="Combat")
+	TArray<FTagMontage> AttackMontages;
+	
+	virtual FVector GetCombatSocketLocation_Implementation() const override;
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 	virtual void Die() override;
 	virtual bool IsDead_Implementation() const override;
 	virtual AActor* GetAvatarActor_Implementation() override;
+	virtual TArray<FTagMontage> GetAttackMontages_Implementation() override;
 	// End Combat Interface
 
 	UFUNCTION(NetMulticast, Reliable)
