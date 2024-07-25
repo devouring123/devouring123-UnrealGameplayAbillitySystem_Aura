@@ -61,6 +61,11 @@ public:
 	FGameplayTag Abilities_Attack_Ranged;
 	FGameplayTag Abilities_Attack_Spell;
 
+	FGameplayTag Montage_Attack_Weapon;
+	FGameplayTag Montage_Attack_LeftHand;
+	FGameplayTag Montage_Attack_RightHand;
+	
+
 protected:
 
 private:
