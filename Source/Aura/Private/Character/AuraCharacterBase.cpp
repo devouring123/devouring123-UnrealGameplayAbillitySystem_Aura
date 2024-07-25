@@ -3,6 +3,7 @@
 
 #include "Character/AuraCharacterBase.h"
 #include "AbilitySystemComponent.h"
+#include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Aura/Aura.h"
 #include "Components/CapsuleComponent.h"
@@ -33,10 +34,22 @@ void AAuraCharacterBase::BeginPlay()
 	Super::BeginPlay();
 }
 
-FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation() const
+FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) const
 {
-	check(Weapon);
-	return Weapon->GetSocketLocation(WeaponTipSocketName);
+	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+	if(IsValid(Weapon) && MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_Weapon))
+	{
+		return Weapon->GetSocketLocation(WeaponTipSocketName);
+	}
+	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_LeftHand))
+	{
+		return GetMesh()->GetSocketLocation(LeftHandSocketName);
+	}
+	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_RightHand))
+	{
+		return GetMesh()->GetSocketLocation(RightHandSocketName);
+	}
+	return FVector();
 }
 
 UAnimMontage* AAuraCharacterBase::GetHitReactMontage_Implementation()
@@ -46,7 +59,10 @@ UAnimMontage* AAuraCharacterBase::GetHitReactMontage_Implementation()
 
 void AAuraCharacterBase::Die()
 {
-	Weapon->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+	if(IsValid(Weapon))
+	{
+		Weapon->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+	}
 	MulticastHandleDeath();
 }
 
@@ -67,10 +83,13 @@ TArray<FTagMontage> AAuraCharacterBase::GetAttackMontages_Implementation()
 
 void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 {
-	Weapon->SetSimulatePhysics(true);
-	Weapon->SetEnableGravity(true);
-	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-
+	if(IsValid(Weapon))
+	{
+		Weapon->SetSimulatePhysics(true);
+		Weapon->SetEnableGravity(true);
+		Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	}
+	
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->SetEnableGravity(true);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
