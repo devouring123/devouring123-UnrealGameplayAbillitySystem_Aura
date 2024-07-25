@@ -157,12 +157,12 @@ void UAuraAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldC
 	// Add Ignore Actors to Query
 	SphereParams.AddIgnoredActors(ActorsToIgnore);
 
-	// Create Overlap Results
-	TArray<FOverlapResult> Overlaps;
-
 	// Get World From Context Object
 	if (const UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
 	{
+		// Create Overlap Results
+		TArray<FOverlapResult> Overlaps;
+		 
 		World->OverlapMultiByObjectType(
 			Overlaps,
 			SphereOrigin,
