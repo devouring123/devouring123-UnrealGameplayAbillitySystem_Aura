@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AI/NavigationSystemBase.h"
+#include "Aura/AuraVariables.h"
 #include "Game/AuraGameModeBase.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -180,4 +181,12 @@ void UAuraAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldC
 			}
 		}
 	}
+}
+
+bool UAuraAbilitySystemLibrary::IsOnSameTeam(AActor* FirstActor, AActor* SecondActor)
+{
+	const bool bBothArePlayer =  FirstActor->ActorHasTag(ACTOR_TAG_PLAYER) == SecondActor->ActorHasTag(ACTOR_TAG_PLAYER);
+	const bool bBothAreEnemy =  FirstActor->ActorHasTag(ACTOR_TAG_ENEMY) == SecondActor->ActorHasTag(ACTOR_TAG_ENEMY);
+
+	return bBothAreEnemy || bBothArePlayer;
 }

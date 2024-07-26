@@ -52,4 +52,6 @@ public:
 	static void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActor,
 		const TArray<AActor*>& ActorsToIgnore, const FVector& SphereOrigin, float Radius);
 
+	UFUNCTION(BlueprintPure, Category="AuraAbilitySystemLibrary|GameplayMechanics")
+	static bool IsOnSameTeam(AActor* FirstActor, AActor* SecondActor);
 };
