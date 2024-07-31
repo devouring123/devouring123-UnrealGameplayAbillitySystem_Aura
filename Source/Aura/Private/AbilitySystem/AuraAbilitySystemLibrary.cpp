@@ -183,7 +183,7 @@ void UAuraAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldC
 	}
 }
 
-bool UAuraAbilitySystemLibrary::IsOnSameTeam(AActor* FirstActor, AActor* SecondActor)
+bool UAuraAbilitySystemLibrary::IsOnSameTeam(const AActor* FirstActor, const AActor* SecondActor)
 {
 	const bool bBothArePlayer =  FirstActor->ActorHasTag(ACTOR_TAG_PLAYER) == SecondActor->ActorHasTag(ACTOR_TAG_PLAYER);
 	const bool bBothAreEnemy =  FirstActor->ActorHasTag(ACTOR_TAG_ENEMY) == SecondActor->ActorHasTag(ACTOR_TAG_ENEMY);

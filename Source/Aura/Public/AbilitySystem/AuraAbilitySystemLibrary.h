@@ -53,5 +53,5 @@ public:
 		const TArray<AActor*>& ActorsToIgnore, const FVector& SphereOrigin, float Radius);
 
 	UFUNCTION(BlueprintPure, Category="AuraAbilitySystemLibrary|GameplayMechanics")
-	static bool IsOnSameTeam(AActor* FirstActor, AActor* SecondActor);
+	static bool IsOnSameTeam(const AActor* FirstActor, const AActor* SecondActor);
 };
