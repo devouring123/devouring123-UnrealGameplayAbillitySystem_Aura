@@ -40,7 +40,8 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 		ProjectileClass,
 		SpawnTransform,
 		GetOwningActorFromActorInfo(),
-		Cast<APawn>(GetOwningActorFromActorInfo()),
+		Cast<APawn>(GetAvatarActorFromActorInfo()),
+		// Cast<APawn>(GetOwningActorFromActorInfo()),
 		ESpawnActorCollisionHandlingMethod::AlwaysSpawn
 	);
 
@@ -72,5 +73,4 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 	Projectile->DamageEffectSpecHandle = SpecHandle;
 
 	Projectile->FinishSpawning(SpawnTransform);
-
 }
