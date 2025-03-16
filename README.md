@@ -9,9 +9,6 @@
 
 GAS는 이러한 구성 요소들을 통해 복잡한 게임플레이 메커니즘을 효율적으로 구현할 수 있도록 지원함.
 
-## Udemy 강의 링크
-https://www.udemy.com/course/unreal-engine-5-gas-top-down-rpg/
-
 ## 현재 구현 상태
 - GAS 구현
 - RPG/UI 구현
